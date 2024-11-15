@@ -1,3 +1,5 @@
+import clientPromise from "../../lib/mongodb";
+
 const imagesList = [
   {
     id: 1,
@@ -230,13 +232,30 @@ const imagesList = [
 ]
 
 export async function GET(request: Request) {
+
+  const client = await clientPromise;
+  const db = client.db("meme");
+  console.log(db)
+  const imagesCollection = db.collection("images"); // Replace with your collection name
+
   const { searchParams } = new URL(request.url);
   const page = parseInt(searchParams.get("page") || "1", 10);
   const limit = parseInt(searchParams.get("limit") || "10", 10);
   console.log(page, limit);
   const start = (page - 1) * limit;
   const end = start + limit;
-  const photos = imagesList.slice(start, end);
+  // Fetch paginated data
+
+  const photos = await imagesCollection
+    .find({})
+    .skip(start)
+    .limit(limit)
+    .toArray();
+
+
+console.log(photos)
+
+  // const photos = imagesList.slice(start, end);
 
   return Response.json(photos);
 }
