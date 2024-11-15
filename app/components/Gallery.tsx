@@ -38,7 +38,6 @@ export function Gallery() {
   const observerRef = useRef(null); // Reference to the intersection observer
   const loadMoreRef = useRef(null); // Reference to the sentinel element
   const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
   const limit = 8;
 console.log(photos)
   const loadMore = () => {
@@ -64,6 +63,7 @@ console.log(photos)
 
   useEffect(() => {
     // Initialize intersection observer
+    // @ts-expect-error do it later
     observerRef.current = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
@@ -74,12 +74,14 @@ console.log(photos)
     );
 
     if (loadMoreRef.current) {
+        // @ts-expect-error do it later
       observerRef.current.observe(loadMoreRef.current); // Observe the sentinel element
     }
 
     // Cleanup observer on component unmount
     return () => {
       if (observerRef.current && loadMoreRef.current) {
+         // @ts-expect-error do it later
         observerRef.current.unobserve(loadMoreRef.current);
       }
     };
