@@ -46,7 +46,7 @@ console.log(photos)
 
   useEffect(() => {
     const fetchPhotos = async () => {
-      if (page <= 6) { // Ensure we stop fetching after page 7
+      if (page <= 600) { // Ensure we stop fetching after page 7
         console.log("Fetching page:", page);
         try {
           const newPhotos = await fetchPhotosApi(page, limit);
